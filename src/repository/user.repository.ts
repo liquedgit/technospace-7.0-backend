@@ -3,8 +3,8 @@ import DBClient from '../../prisma/prisma.client';
 
 const prisma = DBClient.getInstance().prisma;
 
-export const CreateUser = async(user : User)=>{
-    const newUser = await prisma.user.create({data: user})
+export const CreateUser = async (user: User) => {
+    const newUser = await prisma.user.create({ data: user })
     return newUser
 }
 
@@ -50,3 +50,16 @@ export const isEmailExists = async (email: string): Promise<boolean> => {
     });
     return !!user;
 };
+
+export const updatePassword = async (id: string, newPasswordHashed: string): Promise<boolean> => {
+    const user = await prisma.user.update({
+        where: {
+            id: id,
+        },
+        data: {
+            password: newPasswordHashed
+        }
+    })
+
+    return !!user;
+}
