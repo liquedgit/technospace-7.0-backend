@@ -14,8 +14,7 @@ export const login = async (req: Request, res: Response) => {
         if (!user) {
             return res.status(400).json({ errors: ["Email not found"] })
         }
-        console.log(reqBody.password)
-        console.log(user.password)
+        
         const match = await compare(reqBody.password, user.password);
         if (!match) {
             return res.status(403).json({ errors: ["wrong credentials!"] });
