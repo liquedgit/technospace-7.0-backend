@@ -18,3 +18,14 @@ export const GetRoleById = async(id : string)=>{
     })
     return role
 }
+
+export const GetRoleByName = async(name : string)=>{
+    const role = await prisma.role.findUnique({
+        where: {name : name},
+        select: {
+            id : true,
+            name : true
+        }
+    })
+    return role
+}
