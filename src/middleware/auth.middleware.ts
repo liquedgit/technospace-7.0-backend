@@ -12,7 +12,7 @@ export const isAuthenticated = (
         const token = authHeader && authHeader.split(" ")[1];
 
         if (!token) {
-            return res.status(401).json({ errors: ["token not found!"] });
+            return res.status(401).json({ errors: ["Token not found!"] });
         }
         jwt.verify(
             token,
@@ -32,6 +32,6 @@ export const isAuthenticated = (
         );
     } catch (error) {
         console.log(error);
-        return res.status(400).json({ errors: ["error occurred!"] });
+        return res.status(400).json({ errors: ["Error occurred!"] });
     }
 };
