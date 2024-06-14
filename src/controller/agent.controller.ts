@@ -6,7 +6,7 @@ import { ResponseDto } from "../dto/response.dto"
 export const GetAgents =  async(req: Request, res : Response)=>{
     try{
         const pageNumber = req.query.pageNumber?.toString() || 1
-        const perPage  = req.query.perPage?.toString || 10
+        const perPage  = req.query.perPage?.toString() || 10
         const search = req.query.name?.toString() || ""
         let numberPage : number = 0
         let numberPerPage : number = 0
@@ -21,6 +21,7 @@ export const GetAgents =  async(req: Request, res : Response)=>{
             numberPage = pageNumber
           }
 
+          console.log(search)
         const agents = await GetAgentsRepository(numberPage, numberPerPage, search)
           const agentsResponseDTO : AgentsResponseDTO = {
             agents : agents.map((agent)=>{
