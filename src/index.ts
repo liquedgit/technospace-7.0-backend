@@ -51,7 +51,7 @@ customerAgentChatRoute(io)
 app.use((req: Request, res: Response, next: Function) => {
   next(createError(404));
 });
-const PORT = 1234
+const PORT = 8080
 server.listen(PORT, () =>
   console.log(`⚡️[server]: Server is running at https://localhost:` + PORT)
 )
