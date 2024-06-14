@@ -5,3 +5,6 @@ export const jwtSecret: Secret =
 
 export const profilePictureRelativePath: string =
     "./src/public/profilePicture/";
+
+export const adminRole : string = "Admin"
+export const agentRole : string = "Agent"

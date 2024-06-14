@@ -1,14 +1,10 @@
 import { Router } from "express";
-import * as userController from '../controller/user.controller';
+import { CreateNewAgent, GetAgent } from "../controller/user.controller";
 import { bodyEmptyValidation, errorValidator } from "../middleware/validator.middleware";
+import { IsAdmin, isAuthenticated } from "../middleware/auth.middleware";
 
 const router = Router()
 
-router.post(
-    "/login",
-    bodyEmptyValidation(["email", "password"]),
-    errorValidator,
-    userController.login
-)
-
-export default router;
+router.post("/", isAuthenticated,IsAdmin,bodyEmptyValidation(["email", "password"]), errorValidator,CreateNewAgent)
+router.get("/", isAuthenticated, GetAgent)
+export default router
