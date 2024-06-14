@@ -1,6 +1,7 @@
 import { log } from "console";
 import DBClient from "../../prisma/prisma.client";
 import { User } from "@prisma/client";
+import { adminRole } from "../util/constant";
 
 const prisma = DBClient.getInstance().prisma;
 
@@ -10,7 +11,15 @@ export const GetAgentsRepository = async(pageNumber : number, perPage : number, 
     const agents = await prisma.user.findMany({
         where:{
             name:{
-                contains: search
+                contains: search,
+                mode: "insensitive"
+            },
+            AND:{
+                role : {
+                    name: {
+                        not : adminRole
+                    }
+                }
             }
         },
         skip: 0,
@@ -27,3 +36,19 @@ export const GetAgentsRepository = async(pageNumber : number, perPage : number, 
 
     return agents
 }
+
+export const GetAllAgentsByNameRepository = async(search : string)=>{
+    const agents = await prisma.user.findMany({where : {name: {
+        contains: search,
+        mode : "insensitive"
+        
+    }, AND:{
+        role: {
+            name: {
+                not : adminRole
+            }
+        }
+    }}})
+    return agents
+}
+

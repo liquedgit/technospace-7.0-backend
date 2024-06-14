@@ -7,7 +7,7 @@ import agentAIChatRouter from "./agent.ai.chat.route";
 import customerAIRoomRouter from "./customer.ai.room.route";
 import AgentAIRoomRouter from "./agent.ai.room.route";
 import customerAgentRoomRouter from "./customer.agent.room.route";
-
+import LiveCallRouter from "./live.call.route"
 const router = Router();
 
 router.use("/auth", authRouter);
@@ -17,6 +17,7 @@ router.use("/chats", agentAIChatRouter);
 router.use("/rooms", customerAIRoomRouter);
 router.use("/rooms", AgentAIRoomRouter);
 router.use("/rooms", customerAgentRoomRouter);
+router.use("/live-call", LiveCallRouter)
 router.use("/agents", agentRouter)
 
 export default router;
