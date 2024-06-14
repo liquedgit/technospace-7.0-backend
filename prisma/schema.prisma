@@ -14,14 +14,18 @@ datasource db {
 }
 
 model User {
-  id             String   @id @default(uuid())
-  email          String   @unique
-  name           String
-  password       String
-  role           Role     @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  roleId         String
-  profilePicture String?
-  createdAt      DateTime @default(now())
+  id                 String              @id @default(uuid())
+  email              String              @unique
+  name               String
+  password           String
+  role               Role                @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  roleId             String
+  profilePicture     String?
+  createdAt          DateTime            @default(now())
+  agentAIRooms       AgentAIRoom[]
+  agentAIChats       AgentAIChat[]
+  customerAgentRooms CustomerAgentRoom[]
+  customerAgentChats CustomerAgentChat[]
 
   @@map("users")
 }
@@ -32,4 +36,74 @@ model Role {
   users User[]
 
   @@map("roles")
+}
+
+model CustomerAIRoom {
+  id            String           @id @default(uuid())
+  createdAt     DateTime         @default(now())
+  customerName  String
+  customerEmail String
+  chats         CustomerAIChat[]
+
+  @@map("customer-ai-rooms")
+}
+
+model CustomerAIChat {
+  id               String         @id @default(uuid())
+  customerAIRoom   CustomerAIRoom @relation(fields: [customerAIRoomId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  customerAIRoomId String
+  name             String
+  messageText      String
+  createdAt        DateTime       @default(now())
+
+  @@map("customer-ai-chats")
+}
+
+model AgentAIRoom {
+  id        String        @id @default(uuid())
+  createdAt DateTime      @default(now())
+  agent     User          @relation(fields: [agentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  agentId   String
+  chats     AgentAIChat[]
+
+  @@map("agent-ai-rooms")
+}
+
+model AgentAIChat {
+  id            String      @id @default(uuid())
+  agentAIRoom   AgentAIRoom @relation(fields: [agentAIRoomId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  agentAIRoomId String
+  agent         User?       @relation(fields: [agentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  agentId       String?
+  name          String?
+  messageText   String
+  createdAt     DateTime    @default(now())
+
+  @@map("agent-ai-chats")
+}
+
+model CustomerAgentRoom {
+  id                 String              @id @default(uuid())
+  createdAt          DateTime            @default(now())
+  state              String
+  customerName       String
+  customerEmail      String
+  agent              User?               @relation(fields: [agentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  agentId            String?
+  customerAgentChats CustomerAgentChat[]
+
+  @@map("customer-agent-rooms")
+}
+
+model CustomerAgentChat {
+  id                  String            @id @default(uuid())
+  customerAgentRoom   CustomerAgentRoom @relation(fields: [customerAgentRoomId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  customerAgentRoomId String
+  agent               User?             @relation(fields: [agentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  agentId             String?
+  name                String?
+  messageText         String
+  createdAt           DateTime          @default(now())
+
+  @@map("customer-agent-chats")
 }
