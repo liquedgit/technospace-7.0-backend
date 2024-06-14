@@ -1,21 +1,46 @@
-import { PrismaClient } from "@prisma/client";
+
+import bodyParser from 'body-parser';
+import compression from 'compression';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import express, { Request, Response } from "express";
 import createError from "http-errors"
+import router from './route';
 
-const prisma = new PrismaClient()
+declare global {
+  namespace Express {
+    export interface Request {
+      jwtPayload?: any;
+      fileValidationError?: string;
+    }
+  }
+}
+
 const app = express()
 
-app.use(express.json())
+app.use(
+  cors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+  })
+);
 
+app.use(bodyParser.json());
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
+app.use(compression());
+app.use(cookieParser());
+app.use(express.json());
 
-// TODO: Routing aplikasi akan kita tulis di sini
+app.use('/', router);
 
-
-// handle 404 error
 app.use((req: Request, res: Response, next: Function) => {
-  next(createError(404))
-})
+  next(createError(404));
+});
 
-app.listen(3000, () =>
+app.listen(8080, () =>
   console.log(`⚡️[server]: Server is running at https://localhost:3000`)
 )
