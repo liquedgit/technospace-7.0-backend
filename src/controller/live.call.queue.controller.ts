@@ -3,6 +3,10 @@ import { AddLiveCallQueueRequestDTO, DeleteLiveCallQueueRequestDTO } from "../dt
 import { AddHistoryLiveCallRepository, CreateLiveCallQueue, DeleteLiveQueueRepository, GetAllLiveQueue, GetLiveQueueByEmail, UpdateLiveCallQueueRepository } from "../repository/live.call.repository";
 import { ResponseDto } from "../dto/response.dto";
 import { HistoryLiveCall, LiveCallQueue } from "@prisma/client";
+import { Namespace, Server, Socket } from "socket.io";
+import { v4 } from "uuid";
+
+const LIVECALLQUEUEAGENTROOMID = v4()
 
 export const AddLiveCallQueueController = async(req : Request, res: Response)=>{
     try{
@@ -30,6 +34,31 @@ export const AddLiveCallQueueController = async(req : Request, res: Response)=>{
     }
 }
 
+export const GetLiveCallQueueBySocketIOController = async(socket: Socket, nsp : Namespace)=>{
+    socket.on("join-room", ()=>{
+        console.log("User join room")
+        socket.join(LIVECALLQUEUEAGENTROOMID)
+    })
+    socket.on("join-agent-room", async()=>{
+        console.log("Agent join room")
+        socket.join(LIVECALLQUEUEAGENTROOMID)
+        const queues = await GetAllLiveQueue()
+        nsp.to(LIVECALLQUEUEAGENTROOMID).emit("receive-new-queue", queues)
+    })
+
+    socket.on("delete-post", async()=>{
+        console.log("Data Deleted or changed")
+        const queues = await GetAllLiveQueue()
+        nsp.to(LIVECALLQUEUEAGENTROOMID).emit("receive-new-queue", queues)
+    })
+
+    socket.on("new-queue-added", async()=>{
+        console.log("New queue added")
+        const queues = await GetAllLiveQueue()
+        nsp.to(LIVECALLQUEUEAGENTROOMID).emit("receive-new-queue", queues)
+    })
+}
+
 export const GetLiveCallQueueController = async(req : Request, res : Response)=>{
     try{
         const queues = await GetAllLiveQueue()
@@ -53,6 +82,7 @@ export const DeleteLiveCallQueueController = async (req : Request, res : Respons
         }
         return res.status(200).json(webResponse)
     }catch(err){
+        console.log(err)
         return res.status(500).json({errors:["Internal Server Error"]})
     }
 }

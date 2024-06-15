@@ -3,5 +3,5 @@ export interface EmailResponseDto {
     from: string,
     date: string,
     subject: string,
-    bodyText: string | undefined
+    bodyText: any
 }
