@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { AddLiveCallQueueRequestDTO, DeleteLiveCallQueueRequestDTO } from "../dto/live.call.request.dto";
-import { AddHistoryLiveCallRepository, CreateLiveCallQueue, DeleteLiveQueueRepository, GetAllLiveQueue, GetLiveQueueByEmail, UpdateLiveCallQueueRepository } from "../repository/live.call.repository";
+import { AddHistoryLiveCallRepository, CreateLiveCallQueue, DeleteLiveQueueRepository, GetAllLiveQueue,GetLiveQueueByEmail, UpdateLiveCallQueueRepository } from "../repository/live.call.repository";
 import { ResponseDto } from "../dto/response.dto";
 import { HistoryLiveCall, LiveCallQueue } from "@prisma/client";
 import { Namespace, Server, Socket } from "socket.io";
@@ -74,7 +74,7 @@ export const GetLiveCallQueueController = async(req : Request, res : Response)=>
 export const DeleteLiveCallQueueController = async (req : Request, res : Response)=>{
     try{
         const reqBody : DeleteLiveCallQueueRequestDTO = req.body
-        const deletedQueue = await DeleteLiveQueueRepository(reqBody.email, reqBody.name, reqBody.peerId)
+        const deletedQueue = await DeleteLiveQueueRepository(reqBody.email)
         const addedHistoryLiveCall = await AddHistoryLiveCallRepository(deletedQueue, req.jwtPayload.id)
         
         const webResponse : ResponseDto<HistoryLiveCall> = {

@@ -112,7 +112,7 @@ model CustomerAgentChat {
 
 model LiveCallQueue {
   id            String   @id @default(uuid())
-  customerName  String   @unique
+  customerName  String
   customerEmail String   @unique
   createdAt     DateTime @default(now())
   peerJsID      String
