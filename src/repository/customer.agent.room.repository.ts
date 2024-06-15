@@ -83,7 +83,7 @@ export const getAllRoomByState = async (state: string, agentId: string | null) =
 
 
 export const getRoomByState = async (state: string, agentId: string | null, pageNumber: number, perPage: number) => {
-    const skip: number = (pageNumber <= 1) ? 0 : pageNumber * perPage
+    const skip: number = (pageNumber <= 1) ? 0 : (pageNumber-1) * perPage
     if (agentId != null) {
         const result = await prisma.customerAgentRoom.findMany({
             where: {
@@ -101,6 +101,9 @@ export const getRoomByState = async (state: string, agentId: string | null, page
                 customerName: true,
                 state: true,
             },
+            orderBy: {
+                createdAt: 'asc'
+            }
         })
 
         return result
@@ -110,6 +113,8 @@ export const getRoomByState = async (state: string, agentId: string | null, page
         where: {
             state: state
         },
+        skip: skip,
+        take: perPage,
         select: {
             id: true,
             createdAt: true,
@@ -119,6 +124,9 @@ export const getRoomByState = async (state: string, agentId: string | null, page
             customerName: true,
             state: true,
         },
+        orderBy: {
+            createdAt: 'asc'
+        }
     })
 
     return result

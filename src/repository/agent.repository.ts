@@ -7,7 +7,8 @@ const prisma = DBClient.getInstance().prisma;
 
 
 export const GetAgentsRepository = async(pageNumber : number, perPage : number, search : string) =>{
-    const skip : number = (pageNumber <= 1) ? 0 : pageNumber * perPage
+    const skip: number = (pageNumber <= 1) ? 0 : (pageNumber-1) * perPage
+
     const agents = await prisma.user.findMany({
         where:{
             name:{
