@@ -4,7 +4,7 @@ export const jwtSecret: Secret =
     process.env.JWT_SECRET || "rLnz6M3z1C6ZQQxNXjWHtQaz8GIDZB";
 
 export const openAIApiKey: string =
-    process.env.JWT_SECRET || "rLnz6M3z1C6ZQQxNXjWHtQaz8GIDZB";
+    process.env.OPENAI_API_KEY || "rLnz6M3z1C6ZQQxNXjWHtQaz8GIDZB";
 
 export const emailSender: string =
     process.env.EMAIL_SENDER || "asd@gmail.com";

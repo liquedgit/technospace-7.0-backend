@@ -1,4 +1,5 @@
 import * as customerAgentRoomController from '../controller/customer.agent.room.controller';
+import * as customerAgentRoomAnalyticsController from '../controller/customer.agent.room.analytics.controller';
 import { Router } from "express"
 import { bodyEmptyValidation, errorValidator } from '../middleware/validator.middleware';
 import { isAuthenticated } from '../middleware/auth.middleware';
@@ -33,6 +34,18 @@ router.put(
     bodyEmptyValidation(["customerAgentRoomId"]),
     errorValidator,
     customerAgentRoomController.acceptCustomerAgent
+)
+
+router.put(
+    "/customer-agent/finish",
+    isAuthenticated,
+    bodyEmptyValidation(["customerAgentRoomId"]),
+    errorValidator,
+    customerAgentRoomController.markFinishCustomerAgent
+)
+
+router.get("/customer-agent/analytics",
+    customerAgentRoomAnalyticsController.getCustomerAgentRoomAnalyticsByMonth
 )
 
 export default router;

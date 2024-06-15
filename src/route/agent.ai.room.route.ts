@@ -5,7 +5,7 @@ import { bodyEmptyValidation, errorValidator } from '../middleware/validator.mid
 const router = Router()
 
 router.post(
-    "/customer-ai",
+    "/agent-ai",
     bodyEmptyValidation(["agentId"]),
     errorValidator,
     agentAIRoomController.createAgentAIRoom

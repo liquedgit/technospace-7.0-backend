@@ -26,13 +26,13 @@ export const createAgentAIChat = async (req: Request, res: Response) => {
         const completion = await openai.chat.completions.create({
             messages: [{
                 "role": "system",
-                "content": "You are a good and nice assistant",
+                "content": "Given a customer service query related to Indihome Indonesia in your preferred language, provide a well-informed, accurate, and empathetic response addressing the customer's issue based on Indihome's services, policies, and common troubleshooting steps. Recognize the context and sentiment of the query to provide the most appropriate response.",
             },
             {
                 "role": "user",
                 "content": reqBody.message,
             }],
-            model: "gpt-3.5-turbo",
+            model: `ft:gpt-3.5-turbo-0125:personal::9aIgfTVf`,
         });
 
         await createChat({
@@ -40,13 +40,13 @@ export const createAgentAIChat = async (req: Request, res: Response) => {
             agentAIRoomId: reqBody.roomId,
             name: aiChatBotName,
             agentId: null,
-            messageText: String(completion.choices[0]),
+            messageText: String(completion.choices[0].message.content),
             createdAt: new Date(Date.now())
         })
 
         const responseDto: ResponseDto<CreateAgentAIChatResponseDto> = {
             data: {
-                message: String(completion.choices[0])
+                message: String(completion.choices[0].message.content)
             }
         }
 

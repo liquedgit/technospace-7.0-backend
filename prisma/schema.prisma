@@ -84,14 +84,15 @@ model AgentAIChat {
 }
 
 model CustomerAgentRoom {
-  id                 String              @id @default(uuid())
-  createdAt          DateTime            @default(now())
-  state              String
-  customerName       String
-  customerEmail      String
-  agent              User?               @relation(fields: [agentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  agentId            String?
-  customerAgentChats CustomerAgentChat[]
+  id                        String                     @id @default(uuid())
+  createdAt                 DateTime                   @default(now())
+  state                     String
+  customerName              String
+  customerEmail             String
+  agent                     User?                      @relation(fields: [agentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  agentId                   String?
+  customerAgentChats        CustomerAgentChat[]
+  customerAgentRoomAnalytic CustomerAgentRoomAnalytic?
 
   @@map("customer-agent-rooms")
 }
@@ -127,4 +128,14 @@ model HistoryLiveCall {
   agentId       String
 
   @@map("history-live-call")
+}
+
+model CustomerAgentRoomAnalytic {
+  id                        String            @id @default(uuid())
+  customerAgentRoom         CustomerAgentRoom @relation(fields: [customerAgentRoomId], references: [id])
+  customerAgentRoomId       String            @unique
+  roomChatsSummary          String
+  customerSatisfactionScore Float
+
+  @@map("customer-agent-room-analytics")
 }

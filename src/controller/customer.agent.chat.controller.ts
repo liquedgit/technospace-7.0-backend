@@ -43,16 +43,20 @@ export const handleCustomerAgentChat = (socket: Socket, nsp: Namespace) => {
             createdAt: new Date(Date.now())
         })
 
-        const response: CustomerAgentChatResponseDto = {
-            chatId: chat.id,
-            roomId: chat.customerAgentRoomId,
-            createdAt: chat.createdAt,
-            message: chat.messageText,
-            name: chat.name,
-            userId: chat.agentId
+        if (chat != null) {
+            const response: CustomerAgentChatResponseDto = {
+                chatId: chat.id,
+                roomId: chat.customerAgentRoomId,
+                createdAt: chat.createdAt,
+                message: chat.messageText,
+                name: chat.name,
+                userId: chat.agentId
+            }
+
+            nsp.to(customerAgentChatDto.roomId).emit('receive-chat', response)
         }
 
-        nsp.to(customerAgentChatDto.roomId).emit('receive-chat', response)
+        nsp.to(customerAgentChatDto.roomId).emit('receive-chat', { errors: ["error sending chat"] })
     })
 
     // socket.on('receive-chat', async (customerAgentChatDto: CustomerAgentChatDto) => {
@@ -62,3 +66,4 @@ export const handleCustomerAgentChat = (socket: Socket, nsp: Namespace) => {
     socket.on("disconnect", () => {
     });
 }
+

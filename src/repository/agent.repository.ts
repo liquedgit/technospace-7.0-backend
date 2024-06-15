@@ -22,7 +22,7 @@ export const GetAgentsRepository = async(pageNumber : number, perPage : number, 
                 }
             }
         },
-        skip: 0,
+        skip: skip,
         take: perPage,
         select:{
             createdAt: true,
