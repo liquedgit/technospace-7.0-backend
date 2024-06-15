@@ -44,15 +44,10 @@ export const GetLiveQueueByEmail = async(email : string)=>{
 }
 
 export const DeleteLiveQueueRepository = async(email : string, name : string, peerId : string)=>{
+    console.log(email)
     const deletedQueue =  await prisma.liveCallQueue.delete({
         where:{
             customerEmail : email,
-            AND : {
-                customerName : name,
-                AND : {
-                    peerJsID : peerId
-                }
-            }
         }
     })
     return deletedQueue

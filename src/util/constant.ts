@@ -28,8 +28,9 @@ export const READ_MAIL_CONFIG = {
         password: emailSenderPassword,
         host: 'imap.gmail.com',
         port: 993,
-        authTimeout: 10000,
+        authTimeout: 5000000,
         tls: true,
         tlsOptions: { rejectUnauthorized: false },
+        
     },
 };

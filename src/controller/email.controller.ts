@@ -48,6 +48,7 @@ export const GetEmail = async (req: Request, res: Response) => {
           const from = result.parts[1].body.from[0];
           const date = result.parts[1].body.date[0];
           const subject = result.parts[1].body.subject[0];
+          
           const email = await simpleParser(result.parts[0].body);
 
           const emailResponseDto: EmailResponseDto = {
@@ -55,14 +56,15 @@ export const GetEmail = async (req: Request, res: Response) => {
             from: from,
             date: date,
             subject: subject,
-            bodyText: email.text,
+            bodyText: result.parts[0].body,
           };
 
           emailResponseDtos.push(emailResponseDto);
         }
 
         const responseDto: ResponseDto<EmailResponseDto[]> = {
-          data: emailResponseDtos
+          data: emailResponseDtos,
+          totalCount: results.length
         }
 
         return res.status(200).json(responseDto);
@@ -88,7 +90,8 @@ export const GetEmail = async (req: Request, res: Response) => {
         emailResponseDtos.push(emailResponseDto);
       }
       const responseDto: ResponseDto<EmailResponseDto[]> = {
-        data: emailResponseDtos
+        data: emailResponseDtos,
+        totalCount: results.length
       }
 
       return res.status(200).json(responseDto);

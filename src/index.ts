@@ -9,6 +9,7 @@ import router from './route';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { customerAgentChatRoute } from './route/customer.agent.chat.route';
+import { GetLiveCallQueueBySocketIORoute } from './route/live.call.route';
 
 declare global {
   namespace Express {
@@ -47,6 +48,7 @@ app.use(express.json());
 
 app.use('/', router);
 customerAgentChatRoute(io)
+GetLiveCallQueueBySocketIORoute(io)
 
 app.use((req: Request, res: Response, next: Function) => {
   next(createError(404));
