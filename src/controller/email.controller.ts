@@ -48,7 +48,7 @@ export const GetEmail = async (req: Request, res: Response) => {
           const from = result.parts[1].body.from[0];
           const date = result.parts[1].body.date[0];
           const subject = result.parts[1].body.subject[0];
-          
+
           const email = await simpleParser(result.parts[0].body);
 
           const emailResponseDto: EmailResponseDto = {
@@ -305,7 +305,7 @@ async function markEmailAsSeen(emailId: number) {
 
     await connection.openBox('INBOX');
 
-    const searchCriteria = ['UID', emailId];
+    const searchCriteria = [['UID', emailId]];
     const fetchOptions = {
       bodies: ['HEADER', 'TEXT'],
       markSeen: true

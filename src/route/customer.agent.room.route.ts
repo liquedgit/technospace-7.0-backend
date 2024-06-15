@@ -44,7 +44,7 @@ router.put(
     customerAgentRoomController.markFinishCustomerAgent
 )
 
-router.get("/customer-agent/analytics",
+router.post("/customer-agent/analytics",
     customerAgentRoomAnalyticsController.getCustomerAgentRoomAnalyticsByMonth
 )
 
