@@ -14,13 +14,13 @@ export const handleCustomerAgentChat = (socket: Socket, nsp: Namespace) => {
     })
 
 
-    socket.on('join-room-agent', (roomId: string) => {
+    socket.on('join-room-agent', (roomId: string, agentName: string) => {
         console.log("agent join")
         socket.join(roomId)
         // const clients = nsp.adapter.rooms.get(roomId);
         // if (clients?.size == 2) {
         // console.log("asdasd")
-        socket.broadcast.to(roomId).emit('agent-joined', 'Agent joined the room');
+        socket.broadcast.to(roomId).emit('agent-joined', agentName);
         // }
     })
 

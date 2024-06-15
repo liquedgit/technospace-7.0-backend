@@ -6,7 +6,7 @@ const router = Router()
 
 router.post(
     "/agent-ai",
-    bodyEmptyValidation(["roomId", "message", "customerName"]),
+    bodyEmptyValidation(["roomId", "message", "agentId"]),
     errorValidator,
     agentAIChatController.createAgentAIChat
 )
