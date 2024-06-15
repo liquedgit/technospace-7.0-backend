@@ -9,13 +9,14 @@ export const handleCustomerAgentChat = (socket: Socket, nsp: Namespace) => {
 
 
     socket.on('join-room-customer', (roomId: string) => {
-        console.log("customer join")
+        console.log("customer join ", roomId)
         socket.join(roomId)
     })
 
 
-    socket.on('join-room-agent', (roomId: string, agentName: string) => {
-        console.log("agent join")
+    socket.on('join-room-agent', ({ roomId, agentName }: { roomId: string, agentName: string }) => {
+        console.log("agent join ", roomId)
+        console.log(agentName)
         socket.join(roomId)
         // const clients = nsp.adapter.rooms.get(roomId);
         // if (clients?.size == 2) {
@@ -43,7 +44,9 @@ export const handleCustomerAgentChat = (socket: Socket, nsp: Namespace) => {
             createdAt: new Date(Date.now())
         })
 
-        if (chat != null) {
+        console.log(chat)
+
+        if (chat !== null) {
             const response: CustomerAgentChatResponseDto = {
                 chatId: chat.id,
                 roomId: chat.customerAgentRoomId,
@@ -54,9 +57,9 @@ export const handleCustomerAgentChat = (socket: Socket, nsp: Namespace) => {
             }
 
             nsp.to(customerAgentChatDto.roomId).emit('receive-chat', response)
+        } else {
+            nsp.to(customerAgentChatDto.roomId).emit('receive-chat', { errors: ["error sending chat"] })
         }
-
-        nsp.to(customerAgentChatDto.roomId).emit('receive-chat', { errors: ["error sending chat"] })
     })
 
     // socket.on('receive-chat', async (customerAgentChatDto: CustomerAgentChatDto) => {
