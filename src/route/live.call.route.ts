@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { bodyEmailValidation, bodyEmptyValidation } from "../middleware/validator.middleware";
-import { AddLiveCallQueueController, DeleteLiveCallQueueController, GetLiveCallQueueBySocketIOController, GetLiveCallQueueController } from "../controller/live.call.queue.controller";
-import { GetAllLiveQueue } from "../repository/live.call.repository";
+import { AddLiveCallQueueController, DeleteLiveCallQueueController, GetLiveCallQueueBySocketIOController } from "../controller/live.call.queue.controller";
 import { isAuthenticated } from "../middleware/auth.middleware";
 import { Namespace, Server, Socket } from "socket.io";
 
