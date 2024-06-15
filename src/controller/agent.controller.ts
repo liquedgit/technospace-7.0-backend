@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
-import { GetAgentsRepository } from "../repository/agent.repository"
-import { AgentsResponseDTO } from "../dto/agents.response.dto"
+import { GetAgentsRepository, GetAllAgentsByNameRepository } from "../repository/agent.repository"
+import {GetAgentResponseDTO} from "../dto/agents.response.dto"
 import { ResponseDto } from "../dto/response.dto"
 
 export const GetAgents =  async(req: Request, res : Response)=>{
@@ -21,10 +21,9 @@ export const GetAgents =  async(req: Request, res : Response)=>{
             numberPage = pageNumber
           }
 
-          console.log(search)
         const agents = await GetAgentsRepository(numberPage, numberPerPage, search)
-          const agentsResponseDTO : AgentsResponseDTO = {
-            agents : agents.map((agent)=>{
+        const totalAgents = await GetAllAgentsByNameRepository(search)
+          const agentsMapped = agents.map((agent)=>{
                 return {
                     email: agent.email,
                     id : agent.id,
@@ -32,9 +31,10 @@ export const GetAgents =  async(req: Request, res : Response)=>{
                     role : agent.role.name
                 }
             })
-          }
-          const webResponseDTO : ResponseDto<AgentsResponseDTO> = {
-            data : agentsResponseDTO
+          
+          const webResponseDTO : ResponseDto<GetAgentResponseDTO[]> = {
+            data : agentsMapped,
+            totalCount : totalAgents.length
           }
         return res.status(200).json(webResponseDTO)
 

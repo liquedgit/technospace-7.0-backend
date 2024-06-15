@@ -1,3 +1,4 @@
 export interface ResponseDto<T> {
-    data: T
+    data: T,
+    totalCount? : number
 }

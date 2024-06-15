@@ -8,6 +8,7 @@ import customerAIRoomRouter from "./customer.ai.room.route";
 import AgentAIRoomRouter from "./agent.ai.room.route";
 import customerAgentRoomRouter from "./customer.agent.room.route";
 import emailRouter from "./email.route";
+import LiveCallRouter from "./live.call.route"
 
 const router = Router();
 
@@ -18,6 +19,7 @@ router.use("/chats", agentAIChatRouter);
 router.use("/rooms", customerAIRoomRouter);
 router.use("/rooms", AgentAIRoomRouter);
 router.use("/rooms", customerAgentRoomRouter);
+router.use("/live-call", LiveCallRouter)
 router.use("/agents", agentRouter)
 router.use("/emails", emailRouter)
 

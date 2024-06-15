@@ -1,5 +1,7 @@
-import { MeResponseDTO } from "./me.response.dto";
 
-export interface AgentsResponseDTO {
-    agents : MeResponseDTO[]
+export interface GetAgentResponseDTO {
+    email: string;
+    id: string;
+    name: string;
+    role: string;
 }
