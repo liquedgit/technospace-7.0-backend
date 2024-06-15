@@ -15,6 +15,7 @@ export const AddLiveCallQueueController = async(req : Request, res: Response)=>{
             const webResponseDTO : ResponseDto<LiveCallQueue>={
                 data:updatedQueue
             }
+            return res.status(201).json(webResponseDTO)
         }
 
         const liveCallQueue = await CreateLiveCallQueue(reqBody.name, reqBody.email, reqBody.peerId)
@@ -24,6 +25,7 @@ export const AddLiveCallQueueController = async(req : Request, res: Response)=>{
         }
         return res.status(201).json(webResponseDTO)
     }catch(err){
+        console.log(err)
         return res.status(500).json({errors:["Internal Server Error"]})
     }
 }

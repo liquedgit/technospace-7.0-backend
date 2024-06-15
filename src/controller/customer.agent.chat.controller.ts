@@ -7,11 +7,9 @@ import { createRoom } from "../repository/customer.ai.room.repository";
 export const handleCustomerAgentChat = (socket: Socket, nsp: Namespace) => {
 
     socket.on('join-room', (roomId: string) => {
-        console.log("asdassdsdsdd")
         socket.join(roomId)
         const clients = nsp.adapter.rooms.get(roomId);
         if (clients?.size == 2) {
-            console.log("asdasd")
             socket.broadcast.to(roomId).emit('agent-joined', 'Agent joined the room');
         }
     })
