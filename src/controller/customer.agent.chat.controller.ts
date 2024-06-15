@@ -1,19 +1,27 @@
 import { Namespace, Server, Socket } from "socket.io"
 import { v4 as uuidv4 } from 'uuid';
 import { createChat } from "../repository/customer.agent.chat.repository"
-import { CustomerAgentChatDto } from "../dto/customer.agent.chat.dto";
+import { CustomerAgentChatRequestDto } from "../dto/customer.agent.chat.request.dto";
+import { CustomerAgentChatResponseDto } from "../dto/customer.agent.chat.response.dto";
 import { createRoom } from "../repository/customer.ai.room.repository";
 
 export const handleCustomerAgentChat = (socket: Socket, nsp: Namespace) => {
 
-    socket.on('join-room', (roomId: string) => {
-        console.log("asdassdsdsdd")
+
+    socket.on('join-room-customer', (roomId: string) => {
+        console.log("customer join")
         socket.join(roomId)
-        const clients = nsp.adapter.rooms.get(roomId);
-        if (clients?.size == 2) {
-            console.log("asdasd")
-            socket.broadcast.to(roomId).emit('agent-joined', 'Agent joined the room');
-        }
+    })
+
+
+    socket.on('join-room-agent', (roomId: string) => {
+        console.log("agent join")
+        socket.join(roomId)
+        // const clients = nsp.adapter.rooms.get(roomId);
+        // if (clients?.size == 2) {
+        // console.log("asdasd")
+        socket.broadcast.to(roomId).emit('agent-joined', 'Agent joined the room');
+        // }
     })
 
     // const roomId = socket.handshake.query.id
@@ -25,8 +33,8 @@ export const handleCustomerAgentChat = (socket: Socket, nsp: Namespace) => {
     // }
     // socket.join(roomId)
 
-    socket.on('send-chat', async (customerAgentChatDto: CustomerAgentChatDto) => {
-        await createChat({
+    socket.on('send-chat', async (customerAgentChatDto: CustomerAgentChatRequestDto) => {
+        const chat = await createChat({
             id: uuidv4(),
             customerAgentRoomId: customerAgentChatDto.roomId,
             name: customerAgentChatDto.name,
@@ -35,12 +43,21 @@ export const handleCustomerAgentChat = (socket: Socket, nsp: Namespace) => {
             createdAt: new Date(Date.now())
         })
 
-        nsp.to(customerAgentChatDto.roomId).emit('receive-chat', customerAgentChatDto)
+        const response: CustomerAgentChatResponseDto = {
+            chatId: chat.id,
+            roomId: chat.customerAgentRoomId,
+            createdAt: chat.createdAt,
+            message: chat.messageText,
+            name: chat.name,
+            userId: chat.agentId
+        }
+
+        nsp.to(customerAgentChatDto.roomId).emit('receive-chat', response)
     })
 
-    socket.on('receive-chat', async (customerAgentChatDto: CustomerAgentChatDto) => {
+    // socket.on('receive-chat', async (customerAgentChatDto: CustomerAgentChatDto) => {
 
-    })
+    // })
 
     socket.on("disconnect", () => {
     });

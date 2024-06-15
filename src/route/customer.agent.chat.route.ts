@@ -5,6 +5,7 @@ export const customerAgentChatRoute = (io: Server) => {
     const nsp: Namespace = io.of("/chats/customer-agent")
 
     nsp.on('connection', (socket: Socket) => {
+        console.log("asdasd")
         handleCustomerAgentChat(socket, nsp)
     })
 }

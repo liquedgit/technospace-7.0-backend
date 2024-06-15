@@ -5,7 +5,7 @@ import { hash } from "bcrypt"
 import {v4 as uuidv4} from "uuid"
 import { GetRoleById, GetRoleByName } from "../repository/role.repository"
 import { agentRole } from "../util/constant"
-import { CreateUser, getUserByEmail, getUserById } from "../repository/user.repository"
+import { CreateUser, getUserByEmail, getUserByID } from "../repository/user.repository"
 import { ResponseDto } from "../dto/response.dto"
 import { RegisterResponseDto } from "../dto/register.response.dto"
 import { getRandomValues, randomInt } from "crypto"
@@ -57,7 +57,7 @@ export const CreateNewAgent =  async(req: Request, res : Response)=>{
 export const GetAgent = async(req : Request, res : Response)=>{
     try{
         const id = req.jwtPayload.id
-        const user = await getUserById(id)
+        const user = await getUserByID(id)
         if(user != null){
             const meResponseDTO : MeResponseDTO = {
                 email : user.email,
